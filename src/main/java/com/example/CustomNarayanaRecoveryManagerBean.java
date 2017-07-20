@@ -71,7 +71,7 @@ public class CustomNarayanaRecoveryManagerBean extends NarayanaRecoveryManagerBe
             LOG.info("Starting the recovery service");
             super.create(null);
 
-            // WARNING: the following XA Resource Recovery is here for testing purposes only. Remove it!
+            // WARNING: the following XA Resource Recovery is here for testing purposes only!
             recoveryManagerService.addXAResourceRecovery(new DummyXAResourceRecovery());
         }
     }

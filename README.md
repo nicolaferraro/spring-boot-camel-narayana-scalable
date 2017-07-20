@@ -2,9 +2,13 @@
 
 This quickstart uses Narayana TX manager with Spring Boot and Apache Camel on Openshift to test 2PC/XA transactions with a JMS resource (ActiveMQ) and a database (PostgreSQL).
 
-The application uses a *(partially) out-of-process* recovery manager and a persistent volume to store transaction logs.
+The application uses a *partially out-of-process* recovery manager and a persistent volume to store transaction logs (the recovery manager 
+is running in the leader instance, so it's `out-of-process` for the rest of the cluster).
 
 The application **supports scaling**. A singleton recovery manager is kept active for the whole cluster using *leader election*.
+
+The requirement for the leader election algorithm to work is that time in the nodes have a limited clock drift (shift < 15 seconds in the current configuration).
+It's mandatory to use **NTP** for production usage. 
 
 ## Installation
 
@@ -101,7 +105,7 @@ curl -w "\n" http://$NARAYANA_HOST/api/
 This message produces an exception in all redeliveries, so that the transaction is always rolled back.
 
 You should **not** find any trace of the message in the `audit_log` table.
-If you check the application log (in one of the instances), you'll find out that the message has been sent to the dead letter queue.
+If you check the application log (you should find traces in all instances), you'll find out that the message has been sent to the dead letter queue.
 
 
 #### Safe system crash
@@ -114,7 +118,7 @@ curl -w "\n" -X POST http://$NARAYANA_HOST/api/?entry=killOnce
 curl -w "\n" http://$NARAYANA_HOST/api/
 ```
 
-This message produces a **immediate crash** of the application in the first delivery, so that the transaction is not committed.
+This message produces a **immediate crash** of the receiving pod during the first delivery, so that the transaction is not committed.
 **Another pod** will process the message in a second delivery (`JMSXDeliveryCount` == 2), and this time it is processed correctly.
 
 In this case you should find **two log records** in the `audit_log` table: `killOnce-2`, `killOnce-2-ok` (the message is processed correctly at **delivery number 2**).
@@ -129,13 +133,14 @@ curl -w "\n" -X POST http://$NARAYANA_HOST/api/?entry=killBeforeCommit
 curl -w "\n" http://$NARAYANA_HOST/api/
 ```
 
-This message produces a **immediate crash after the first phase of the 2pc protocol and before the final commit**.
+This message produces a **immediate crash after the first phase of the 2pc protocol and before the final commit (for some resources)**.
 The message **must not** be processed again, but the transaction manager was not able to send a confirmation to all resources.
 If you `curl -w "\n" http://$NARAYANA_HOST/api/`, you'll not find any trace of the message, or **you'll find inconsistent results, e.g. you may find the `killBeforeCommit-1-ok` log but not the previous `killBeforeCommit-1` (low isolation level)**.
 
-When **recovery manager (you may have killed it) will recover all pending transactions by communicatng with the participating resources** (database and JMS broker).
+The **recovery manager (you may have killed it) will recover all pending transactions by communicatng with the participating resources** (database and JMS broker).
 
-When the recovery manager has finished processing failed transactions (**it may take time**), you should find **two log records** in the `audit_log` table (in order): `killBeforeCommit-1`, `killBeforeCommit-1-ok` (no redeliveries here, the message is processed correctly at **delivery number 1**).
+When the recovery manager has finished processing failed transactions (**it may take time**), 
+you should find **two log records** in the `audit_log` table (in order): `killBeforeCommit-1` (it will appear if it was missing), `killBeforeCommit-1-ok` (no redeliveries here, the message is processed correctly at **delivery number 1**).
 
 
 ## Credits

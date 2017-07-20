@@ -1,9 +1,6 @@
 {
     "spec": {
         "replicas": 3,
-        "strategy": {
-            "type": "Recreate"
-        },
         "template": {
             "spec": {
                 "serviceAccount": "leader",
