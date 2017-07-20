@@ -1,0 +1,15 @@
+{
+  "kind": "ImageStream",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "jboss-amq-62"
+  },
+  "spec": {
+    "dockerImageRepository": "registry.access.redhat.com/jboss-amq-6/amq62-openshift",
+    "tags": [
+      {
+        "name": "1.3"
+      }
+    ]
+  }
+}

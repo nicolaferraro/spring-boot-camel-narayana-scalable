@@ -1,0 +1,18 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "spec": {
+    "ports": [
+      {
+        "port": 61616,
+        "targetPort": 61616
+      }
+    ],
+    "selector": {
+      "deploymentConfig": "broker-amq"
+    }
+  },
+  "metadata": {
+    "name": "broker-amq-tcp"
+  }
+}

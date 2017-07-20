@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+  <!-- Using pod name as node identifier -->
+  <!--<entry key="CoreEnvironmentBean.nodeIdentifier">1</entry>-->
+
+  <!-- Tell recovery manager to recovery every node -->
+  <entry key="JTAEnvironmentBean.xaRecoveryNodes">*</entry>
+  <entry key="JTAEnvironmentBean.xaResourceOrphanFilterClassNames">
+    com.arjuna.ats.internal.jta.recovery.arjunacore.JTATransactionLogXAResourceOrphanFilter
+    com.arjuna.ats.internal.jta.recovery.arjunacore.JTANodeNameXAResourceOrphanFilter
+  </entry>
+  <entry key="CoreEnvironmentBean.socketProcessIdPort">0</entry>
+  <entry key="RecoveryEnvironmentBean.recoveryModuleClassNames">
+    com.arjuna.ats.internal.arjuna.recovery.AtomicActionRecoveryModule
+    com.arjuna.ats.internal.jta.recovery.arjunacore.XARecoveryModule
+  </entry>
+  <entry key="RecoveryEnvironmentBean.expiryScannerClassNames">
+    com.arjuna.ats.internal.arjuna.recovery.ExpiredTransactionStatusManagerScanner
+  </entry>
+  <entry key="RecoveryEnvironmentBean.recoveryPort">4712</entry>
+  <entry key="RecoveryEnvironmentBean.recoveryAddress"></entry>
+  <entry key="RecoveryEnvironmentBean.transactionStatusManagerPort">0</entry>
+  <entry key="RecoveryEnvironmentBean.recoveryListener">NO</entry>
+
+  <!-- Setup JDBC object store to use PostgreSQL -->
+  <entry key="ObjectStoreEnvironmentBean.objectStoreType">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.JDBCStore
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.jdbcAccess">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.accessors.DynamicDataSourceJDBCAccess;ClassName=org.postgresql.ds.PGSimpleDataSource;DatabaseName=narayana;User=narayana;Password=narayana;ServerName=narayana-database;PortNumber=5432
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.tablePrefix">Action</entry>
+  <entry key="ObjectStoreEnvironmentBean.dropTable">false</entry>
+  <entry key="ObjectStoreEnvironmentBean.stateStore.objectStoreType">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.JDBCStore
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.stateStore.jdbcAccess">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.accessors.DynamicDataSourceJDBCAccess;ClassName=org.postgresql.ds.PGSimpleDataSource;DatabaseName=narayana;User=narayana;Password=narayana;ServerName=narayana-database;PortNumber=5432
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.stateStore.tablePrefix">stateStore</entry>
+  <entry key="ObjectStoreEnvironmentBean.stateStore.dropTable">false</entry>
+  <entry key="ObjectStoreEnvironmentBean.communicationStore.objectStoreType">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.JDBCStore
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.communicationStore.jdbcAccess">
+    com.arjuna.ats.internal.arjuna.objectstore.jdbc.accessors.DynamicDataSourceJDBCAccess;ClassName=org.postgresql.ds.PGSimpleDataSource;DatabaseName=narayana;User=narayana;Password=narayana;ServerName=narayana-database;PortNumber=5432
+  </entry>
+  <entry key="ObjectStoreEnvironmentBean.communicationStore.tablePrefix">Communication</entry>
+  <entry key="ObjectStoreEnvironmentBean.communicationStore.dropTable">false</entry>
+</properties>

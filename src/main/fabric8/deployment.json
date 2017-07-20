@@ -1,0 +1,81 @@
+{
+    "spec": {
+        "replicas": 3,
+        "strategy": {
+            "type": "Recreate"
+        },
+        "template": {
+            "spec": {
+                "serviceAccount": "leader",
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "NARAYANA_NODE_IDENTIFIER",
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "fieldPath": "metadata.name"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_DATASOURCE_USERNAME",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "narayana-database",
+                                        "key": "database-user"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_DATASOURCE_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "narayana-database",
+                                        "key": "database-password"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_JTA_NARAYANA_RECOVERY_DB_USER",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "narayana-database",
+                                        "key": "database-user"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_JTA_NARAYANA_RECOVERY_DB_PASS",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "narayana-database",
+                                        "key": "database-password"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_ACTIVEMQ_USER",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "broker-amq",
+                                        "key": "broker-user"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "SPRING_ACTIVEMQ_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "broker-amq",
+                                        "key": "broker-password"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}
