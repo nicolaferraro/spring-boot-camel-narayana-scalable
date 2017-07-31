@@ -26,7 +26,7 @@ mvn clean install -DskipTests
 mvn clean install -DskipTests
 ```
 
-3. Build Camel from [here](https://github.com/nicolaferraro/camel/tree/CAMEL-11331-v3) (2.20.0-SNAPSHOT with CAMEL-11331)
+3. Build Camel from [here](https://github.com/nicolaferraro/camel/tree/CAMEL-11331-v4) (2.20.0-SNAPSHOT with CAMEL-11331)
 
 ```
 mvn clean install -P fastinstall
